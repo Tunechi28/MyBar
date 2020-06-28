@@ -1,0 +1,32 @@
+<div>
+<label>Drink Name</label>
+<input type="text" name="name" value="<%= drink.name %>">
+</div>
+<div>
+<label>Brand</label>
+    <select name="brand" >
+        <% brands.forEach(brand => { %>
+            <% if(brand.id === drink.brand){ %>
+                <option selected value="<%= brand.id %>" label="<%= brand.name %>">
+            <% }else{ %>
+                <option value="<%= brand.id %>" label="<%= brand.name %>">
+            <%} %> 
+       <% }) %> 
+    </select>
+</div>
+<div>
+    <label>image</label>
+    <input type="file">
+</div>
+<div>
+    <label>Drink Type</label>
+    <input type="text" name="drinkType" value="<%= drink.drinkType%>">
+</div>
+<div>
+    <label>Price(in Naira)</label>
+    <input type="number" name="price" step="5" min="100" value="<%= drink.price%>">
+</div>
+<div>
+    <label>About Drink</label>
+    <textarea name="aboutDrink"><%= drink.aboutDrink %> </textarea>
+</div>

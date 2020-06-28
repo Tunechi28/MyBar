@@ -9,6 +9,7 @@ app.use(express.urlencoded({limit:'10mb',extended : false}));
 const expressLayouts = require('express-ejs-layouts');
 const indexRouter = require('./routes/index');
 const brandsRouter = require('./routes/brands');
+const drinksRouter = require('./routes/drinks');
 
 app.set('view engine', 'ejs');
 app.set('views',__dirname + '/views');
@@ -18,6 +19,7 @@ app.use(express.static('public'));
 
 app.use('/', indexRouter);
 app.use('/brands', brandsRouter);
+app.use('/drinks', drinksRouter);
 const mongoose = require('mongoose');
 mongoose.connect(process.env.DATABASE_URL, {useNewUrlParser: true, useUnifiedTopology: true});
 const db = mongoose.connection;
