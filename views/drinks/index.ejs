@@ -1,0 +1,18 @@
+<h2>Search Drink</h2>
+<form action="/drinks" method="GET">
+<div>
+    <label>Name</label>
+    <input type="text" name="name" value="<%=searchOptions.name%>">
+</div>
+<div>
+    <label>Drink Type</label>
+    <input type="text" name="drinkType" value="<%=searchOptions.drinkType%>">
+</div>
+<button type="submit">Search</button>
+</form>
+<br>
+<div>
+    <% drinks.forEach(drink => { %>
+        <img height="150" width="100" src="<%= drink.drinkImagePath %>">
+    <%}); %> 
+</div>

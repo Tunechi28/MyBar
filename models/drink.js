@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const drinkImageBasePath = 'uploads/drinkImages'
+const path = require('path');
 
 const drinkSchema = new mongoose.Schema({
     name : {
@@ -32,4 +34,10 @@ const drinkSchema = new mongoose.Schema({
     }
 })
 
+drinkSchema.virtual('drinkImagePath').get(function(){
+    if(this.drinkImage != null){
+        return path.join('/',drinkImageBasePath,this.drinkImage);
+    }
+})
 module.exports = mongoose.model('Drink', drinkSchema);
+module.exports.drinkImageBasePath = drinkImageBasePath;
