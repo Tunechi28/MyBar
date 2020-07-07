@@ -3,10 +3,12 @@ if(process.env.NODE_ENV !== 'production'){
 }
 
 const express = require('express');
+const methodOverride = require('method-override');
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({limit:'10mb',extended : false}));
 const expressLayouts = require('express-ejs-layouts');
+app.use(methodOverride('_method'));
 const indexRouter = require('./routes/index');
 const brandsRouter = require('./routes/brands');
 const drinksRouter = require('./routes/drinks');

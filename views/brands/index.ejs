@@ -7,4 +7,9 @@
 <br>
 <% brands.forEach(brand => { %>
     <div><%= brand.name %></div>
+    <a href="/brands/<%= brand.id %>">View</a>
+    <a href="/brands/<%= brand.id %>/edit">Edit</a>
+    <%- include('../partials/deleteForm', 
+            {url : `/brands/${brand.id}` }) %>
+    
 <%}); %> 

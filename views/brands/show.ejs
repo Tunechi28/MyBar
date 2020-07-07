@@ -1,0 +1,11 @@
+<h2><%= brand.name %></h2>
+<a href="/brands/<%= brand.id %>/edit">Edit</a>
+    <%- include('../partials/deleteForm', 
+            {url : `/brands/${brand.id}` }) %>
+
+<% if(drinksUnderBrand.length > 0){ %>
+    <h2>Drinks under this Brand</h2>
+    <% drinksUnderBrand.forEach(drink => { %>
+        <img height="150px" width="100px" src="<%= drink.drinkImagePath %>">
+    <%}); %> 
+<%}%>
