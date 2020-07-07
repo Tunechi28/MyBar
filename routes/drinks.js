@@ -1,19 +1,19 @@
 const express = require('express');
 const router = express.Router();
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+//const multer = require('multer');
+//const path = require('path');
+//const fs = require('fs');
 const Drink = require('../models/drink');
 const Brand = require('../models/brand');
-const uploadPath = path.join('public', Drink.drinkImageBasePath);
-const imageMimeTypes = ['image/jpeg','image/png','image/gif']
-const upload= multer({
-    dest: uploadPath,
-    fileFilter: (req,file, callback) => {
-        callback(null, imageMimeTypes.includes(file.mimetype));
-    }
+// const uploadPath = path.join('public', Drink.drinkImageBasePath);
+ const imageMimeTypes = ['image/jpeg','image/png','image/gif']
+// const upload= multer({
+//     dest: uploadPath,
+//     fileFilter: (req,file, callback) => {
+//         callback(null, imageMimeTypes.includes(file.mimetype));
+//     }
 
-})
+// })
 
 //all drinks route
 router.get('/', async(req,res) => {
@@ -45,32 +45,33 @@ router.get('/new', async(req,res) => {
 
 //create new drink
 
-router.post('/', upload.single('image'), async(req,res) => {
-    const fileName = req.file != null ? req.file.filename : null
+router.post('/', async(req,res) => {
+    //const fileName = req.file != null ? req.file.filename : null
     const drink = new Drink({
         name : req.body.name,
         brand: req.body.brand,
         drinkType: req.body.drinkType,
         price: req.body.price,
         aboutDrink: req.body.aboutDrink,
-        drinkImage: fileName
+       // drinkImage: fileName
     });
+    saveImage(drink,req.body.image)
     try{
         const newDrink = await drink.save();
         res.redirect('drinks')
     }catch{
-        if(drink.drinkImage != null){
-            removeImage(drink.drinkImage);
-        }
+        // if(drink.drinkImage != null){
+        //     removeImage(drink.drinkImage);
+        // }
         renderNewPage(res, drink, true);
     }
 });
 
-function removeImage(fileName){
-    fs.unlink(path.join(uploadPath,fileName), err =>{
-        if(err) console.log(err);
-    })
-}
+// function removeImage(fileName){
+//     fs.unlink(path.join(uploadPath,fileName), err =>{
+//         if(err) console.log(err);
+//     })
+// }
 
 async function renderNewPage(res, drink, hasError = false){
     try{
@@ -86,4 +87,13 @@ async function renderNewPage(res, drink, hasError = false){
     }
 }
 
+function saveImage(drink, imageEncoded){
+    if(imageEncoded == null)return
+    const image = JSON.parse(imageEncoded);
+
+if(image != null &&  imageMimeTypes.includes(image.type)){
+    drink.drinkImage = new Buffer.from(image.data, 'base64');
+    drink.drinkImageType= image.type;
+}
+}
 module.exports = router;

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-const drinkImageBasePath = 'uploads/drinkImages'
-const path = require('path');
+// const drinkImageBasePath = 'uploads/drinkImages'
+// const path = require('path');
 
 const drinkSchema = new mongoose.Schema({
     name : {
@@ -24,6 +24,10 @@ const drinkSchema = new mongoose.Schema({
         required: true
     },
     drinkImage : {
+        type: Buffer,
+        required: true
+    },
+    drinkImageType: {
         type: String,
         required: true
     },
@@ -35,9 +39,9 @@ const drinkSchema = new mongoose.Schema({
 })
 
 drinkSchema.virtual('drinkImagePath').get(function(){
-    if(this.drinkImage != null){
-        return path.join('/',drinkImageBasePath,this.drinkImage);
+    if(this.drinkImage != null && this.drinkImageType != null){
+        return `data:${this.drinkImageType};charset=utf-8;base64,${this.drinkImage.toString('base64')}`
     }
 })
 module.exports = mongoose.model('Drink', drinkSchema);
-module.exports.drinkImageBasePath = drinkImageBasePath;
+//module.exports.drinkImageBasePath = drinkImageBasePath;
