@@ -13,6 +13,9 @@
 <br>
 <div>
     <% drinks.forEach(drink => { %>
-        <img height="150px" width="100px" src="<%= drink.drinkImagePath %>">
+        <a href="/drinks/<%= drink.id %>">
+            <img height="150px" width="100px" src="<%= drink.drinkImagePath %>">
+        </a>
+        
     <%}); %> 
 </div>

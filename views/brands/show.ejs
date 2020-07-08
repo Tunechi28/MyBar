@@ -6,6 +6,9 @@
 <% if(drinksUnderBrand.length > 0){ %>
     <h2>Drinks under this Brand</h2>
     <% drinksUnderBrand.forEach(drink => { %>
-        <img height="150px" width="100px" src="<%= drink.drinkImagePath %>">
+        <a href="/drinks/<%= drink.id %>">
+            <img height="150px" width="100px" src="<%= drink.drinkImagePath %>">
+        </a>
+        
     <%}); %> 
 <%}%>

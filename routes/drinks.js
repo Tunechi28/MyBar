@@ -58,7 +58,7 @@ router.post('/', async(req,res) => {
     saveImage(drink,req.body.image)
     try{
         const newDrink = await drink.save();
-        res.redirect('drinks')
+        res.redirect(`drinks/${drink.id}`);
     }catch{
         // if(drink.drinkImage != null){
         //     removeImage(drink.drinkImage);
@@ -67,25 +67,107 @@ router.post('/', async(req,res) => {
     }
 });
 
+//show drink route
+router.get('/:id', async(req,res) => {
+    try{
+        const drink = await Drink.findById(req.params.id).populate('brand').exec();
+        res.render('drinks/show',{
+            drink: drink
+        })
+    }catch(e){
+        console.log(e)
+        res.redirect('/');
+    }
+})
+
+router.get('/:id/edit', async(req,res) => {
+    try{
+        const drink = await Drink.findById(req.params.id);
+        renderEditPage(res,drink);
+    }catch{
+        res.redirect('/')
+    }
+});
+
+//update drink
+router.put('/:id', async(req,res) => {
+    //const fileName = req.file != null ? req.file.filename : null
+    let drink;
+    
+    try{
+        drink = await Drink.findById(req.params.id);
+        drink.name = req.body.name;
+        drink.brand = req.body.brand;
+        drink.drinkType = req.body.drinkType;
+        drink.price = req.body.price;
+        drink.aboutDrink = req.body.aboutDrink;
+        if(req.body.image != null && req.body.image !==''){
+            saveImage(drink,req.body.image)
+        }
+        await drink.save();
+        res.redirect(`/drinks/${drink.id}`);
+    }catch{
+        // if(drink.drinkImage != null){
+        //     removeImage(drink.drinkImage);
+        // }
+        renderNewPage(res, drink, true);
+    }
+});
+
+//delete drink
+
+router.delete('/:id', async(req,res) => {
+    let drink;
+    try{
+        drink = await Drink.findById(req.params.id)
+        await drink.remove();
+        res.redirect('/drinks');
+    }catch(e){
+        if(drink == null){
+            res.render('drinks/show', {
+                drink: drink,
+                errorMessage: 'could not remove drink'
+            });
+        }else{
+            res.redirect(`/drinks/${drink.id}`)
+        }
+    }
+})
+
 // function removeImage(fileName){
 //     fs.unlink(path.join(uploadPath,fileName), err =>{
 //         if(err) console.log(err);
 //     })
 // }
 
-async function renderNewPage(res, drink, hasError = false){
+async function renderNewPage(res, drink,form, hasError = false){
+    renderFormPage(res,drink,'new',hasError);
+}
+
+async function renderEditPage(res, drink,form, hasError = false){
+    renderFormPage(res,drink,'edit',hasError);
+}
+
+async function renderFormPage(res, drink,form, hasError = false){
     try{
         const brands = await Brand.find({});
         const params = {
             brands : brands,
             drink : drink
         }
-        if(hasError) params.errorMessage = 'Error creating page'
-        res.render('drinks/new', params);
+        if(hasError){
+            if(form ==="edit"){
+                params.errorMessage = 'Error editing page';
+            }else{
+                params.errorMessage = 'Error creating page';
+            }
+        } 
+        res.render(`drinks/${form}`, params);
     }catch(err){
         res.redirect('/drinks')
     }
 }
+
 
 function saveImage(drink, imageEncoded){
     if(imageEncoded == null)return

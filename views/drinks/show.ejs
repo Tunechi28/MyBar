@@ -1,0 +1,11 @@
+<h2><%= drink.name %></h2>
+<img width="100" height="150" src="<%= drink.drinkImagePath %>">
+<div>Brand : <%= drink.brand.name %></div>
+<div>Drink Type : <%= drink.drinkType %></div>
+<div>Price : <%= drink.price %></div>
+<div>About Drink : <%= drink.aboutDrink %></div>
+
+<a href="/drinks/<%= drink.id %>/edit">Edit</a>
+<%- include('../partials/deleteForm', 
+            {url : `/drinks/${drink.id}` }) %>
+<a href="/brands/<%= drink.brand.id %>">View Brand`</a>
