@@ -1,0 +1,19 @@
+<form action="/drinks/<%= drink.id %>/reviews" method="POST">
+<div>
+    <label for="name">Name</label>
+    <input type="text" id="name" name="name">
+</div>
+<div>
+    <label for="review">Write Review</label>
+    <textarea name="review" id="" cols="15" rows="5"></textarea>
+</div>
+<button type="submit">Submit review</button>
+</form>
+<%if(reviews.length == 0){%>
+    <p>We have no reviews for this drink</p>
+<% }else{ %>
+    <% reviews.forEach((review) => { %>
+        <h3><%= review.name %></h3>
+        <p><%= review.review %></p>
+   <% }) %>
+<% } %>

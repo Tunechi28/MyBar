@@ -5,6 +5,7 @@ const router = express.Router();
 //const fs = require('fs');
 const Drink = require('../models/drink');
 const Brand = require('../models/brand');
+const Review = require('../models/review');
 // const uploadPath = path.join('public', Drink.drinkImageBasePath);
  const imageMimeTypes = ['image/jpeg','image/png','image/gif']
 // const upload= multer({
@@ -74,8 +75,7 @@ router.get('/:id', async(req,res) => {
         res.render('drinks/show',{
             drink: drink
         })
-    }catch(e){
-        console.log(e)
+    }catch{
         res.redirect('/');
     }
 })
@@ -131,6 +131,39 @@ router.delete('/:id', async(req,res) => {
         }else{
             res.redirect(`/drinks/${drink.id}`)
         }
+    }
+});
+
+
+//show reviews
+router.get('/:id/reviews', async(req,res) => {
+    try{
+        const drink = await Drink.findById(req.params.id)
+        const reviews = await Review.find({drink: drink.id}).limit(20).exec();
+        res.render('drinks/reviews', {
+            drink:drink,
+            reviews: reviews
+        })
+    }catch{
+        res.redirect(`drinks/${drink.id}`);
+    }
+})
+
+//add reviews
+router.post('/:id/reviews', async(req,res) => {
+   const drink = await Drink.findById(req.params.id)
+    const review = new Review({
+        name : req.body.name,
+        review: req.body.review,
+        drink :drink
+        
+    });
+    try{
+        const newReview = await review.save();
+        res.redirect(`/drinks/${req.params.id}/reviews`);
+    }catch(e){
+        res.redirect(`/drinks/${req.params.id}`);
+        console.log(e);
     }
 })
 

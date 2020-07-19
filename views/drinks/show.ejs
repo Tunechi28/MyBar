@@ -9,3 +9,5 @@
 <%- include('../partials/deleteForm', 
             {url : `/drinks/${drink.id}` }) %>
 <a href="/brands/<%= drink.brand.id %>">View Brand`</a>
+<br>
+<a href="/drinks/<%= drink.id %>/reviews">Show reviews</a>
