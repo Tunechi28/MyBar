@@ -141,7 +141,7 @@ router.get('/:id/reviews', async(req,res) => {
         const drink = await Drink.findById(req.params.id)
         const reviews = await Review.find({drink: drink.id}).limit(20).exec();
         res.render('drinks/reviews', {
-            drink:drink,
+            drink: drink,
             reviews: reviews
         })
     }catch{
